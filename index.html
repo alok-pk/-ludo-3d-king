@@ -34,8 +34,8 @@ body{
   padding:10px 10px calc(10px + env(safe-area-inset-bottom));
 }
 .board-wrap{
-  width:min(96vw,calc(100vh - 300px));
-  width:min(96vw,calc(100dvh - 300px));
+  width:min(96vw,calc(100vh - 320px));
+  width:min(96vw,calc(100dvh - 320px));
   min-width:280px;max-width:860px;
 }
 .board-wrap canvas{display:block;width:100%;height:auto;aspect-ratio:1/1;touch-action:manipulation}
@@ -60,7 +60,7 @@ body{
   border-radius:18px;
   box-shadow:0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
 }
-.head{grid-area:head;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px 8px 16px}
+.head{grid-area:head;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px 8px 16px;min-height:58px}
 .logo{display:flex;gap:2px;font-size:28px;font-weight:900;letter-spacing:.04em;line-height:1}
 .logo span:nth-child(1){color:var(--red);text-shadow:0 3px 0 #7d1623}
 .logo span:nth-child(2){color:var(--green);text-shadow:0 3px 0 #0e5430}
@@ -88,11 +88,13 @@ body{
 .icon-btn.muted .on{display:none}
 .icon-btn.muted .off{display:block}
 
-.turn{grid-area:turn;position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;min-width:0}
-.turn canvas{width:64px;height:64px;flex:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
-.turn-text{min-width:0}
-.turn-name{font-size:20px;font-weight:800;color:var(--turn);line-height:1.15}
-.turn-msg{font-size:14px;color:#c9d1ee;margin-top:3px;line-height:1.3;min-height:2.6em}
+.turn{grid-area:turn;position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;min-width:0;height:var(--zone)}
+.turn canvas{width:56px;height:56px;flex:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.turn-text{min-width:0;flex:1;overflow:hidden}
+.turn-name{display:flex;align-items:center;gap:8px;height:26px;font-size:18px;font-weight:800;color:var(--turn);line-height:26px;white-space:nowrap;overflow:hidden}
+.turn-name .nm{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.turn-name .ai-tag{flex:none;margin-left:0}
+.turn-msg{height:20px;margin-top:4px;font-size:14px;line-height:20px;color:#c9d1ee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .arrow{
   position:absolute;z-index:3;color:var(--turn);pointer-events:none;
   opacity:0;transition:opacity .2s;
@@ -102,10 +104,10 @@ body{
 .arrow svg{display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));animation:nudge .75s ease-in-out infinite}
 @keyframes nudge{0%,100%{transform:translateY(-2px)}50%{transform:translateY(8px)}}
 
-.dice-zone{grid-area:dice;display:grid;justify-items:center;align-content:center;gap:4px;padding:10px 16px}
-:root{--d:62px}
+.dice-zone{grid-area:dice;display:grid;justify-items:center;align-content:center;gap:2px;padding:8px;width:124px;height:var(--zone)}
+:root{--d:62px;--zone:136px}
 .dice-scene{
-  position:relative;width:calc(var(--d) * 1.7);height:calc(var(--d) * 1.55);
+  position:relative;width:calc(var(--d) * 1.7);height:calc(var(--d) * 1.45);
   display:grid;place-items:center;perspective:560px;cursor:default;outline:none;border-radius:16px;
   --pip:#e53b4a;
 }
@@ -148,9 +150,18 @@ body{
 .f5{transform:rotateY(-90deg) translateZ(calc(var(--d) / 2))}
 .f3{transform:rotateX(90deg) translateZ(calc(var(--d) / 2))}
 .f4{transform:rotateX(-90deg) translateZ(calc(var(--d) / 2))}
-.dice-hint{font-size:13px;color:var(--muted);min-height:1.2em;text-align:center}
+.roll-badge{
+  width:100%;height:28px;line-height:28px;text-align:center;white-space:nowrap;
+  font-size:14px;font-weight:800;color:var(--muted);contain:layout size;
+}
+.roll-badge.hot{
+  font-size:21px;letter-spacing:.02em;color:var(--turn);
+  text-shadow:0 0 6px rgba(var(--turn-rgb),.95),0 0 16px rgba(var(--turn-rgb),.8),0 0 30px rgba(var(--turn-rgb),.6);
+}
+.roll-badge.pop{animation:pop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.6);opacity:.2}100%{transform:scale(1);opacity:1}}
 
-.scores{grid-area:scores;display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;justify-content:center}
+.scores{grid-area:scores;display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;justify-content:center;align-content:center;min-height:58px}
 .chip{
   --c:#fff;display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;
   border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);font-size:13px;font-weight:700;color:#c9d1ee;
@@ -172,8 +183,8 @@ body{
   :root{--d:78px}
   .panel{width:360px;grid-template-columns:1fr;grid-template-areas:"head" "turn" "dice" "scores"}
   .arrow{right:auto;left:50%;top:auto;bottom:-26px;margin:0 0 0 -13px;transform:none}
-  .dice-zone{padding:14px 16px 10px}
-  .turn{padding:14px 16px}
+  .dice-zone{width:auto;height:164px;padding:10px 16px}
+  .turn{padding:14px 16px;height:104px}
   .turn canvas{width:72px;height:72px}
 }
 
@@ -256,7 +267,11 @@ button:focus-visible{outline:3px solid rgba(255,255,255,.75);outline-offset:2px}
 .menu-sheet .btn.primary{margin-top:16px}
 .fine{margin-top:12px;font-size:12.5px;color:#9aa5cc;line-height:1.45;text-align:center}
 
+@media (max-width:380px){
+  .turn-name{font-size:16px}
+}
 @media (prefers-reduced-motion:reduce){
+  .roll-badge.pop{animation:none}
   .arrow svg{animation:none}
   .board-wrap.shake{animation:none}
 }
@@ -289,7 +304,7 @@ button:focus-visible{outline:3px solid rgba(255,255,255,.75);outline-offset:2px}
       <canvas id="avatar" width="144" height="144"></canvas>
       <div class="turn-text">
         <div class="turn-name" id="turnName">Red's turn</div>
-        <div class="turn-msg" id="turnMsg">Tap the dice to roll</div>
+        <div class="turn-msg" id="turnMsg">Tap dice to roll</div>
       </div>
       <div class="arrow" id="arrow" aria-hidden="true">
         <svg viewBox="0 0 24 24" width="28" height="28"><path d="M12 3v14M5 11l7 8 7-8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -303,7 +318,7 @@ button:focus-visible{outline:3px solid rgba(255,255,255,.75);outline-offset:2px}
           <div class="dice-tilt"><div class="dice" id="dice"></div></div>
         </div>
       </div>
-      <div class="dice-hint" id="diceHint"></div>
+      <div class="roll-badge" id="diceHint" aria-live="polite"></div>
     </section>
 
     <section class="scores ui" id="scores"></section>
@@ -437,7 +452,7 @@ const G = {
   types: ['human', 'human', 'human', 'human'],   // per colour: 'human' | 'ai'
   players: [0, 2], cur: 0,
   state: 'menu',           // menu | roll | rolling | select | moving | over
-  roll: 0, movable: [], tokens: [], gid: 0, winner: -1
+  roll: 0, rollShown: false, movable: [], tokens: [], gid: 0, winner: -1
 };
 const curColor = () => G.players[G.cur];
 const isAI = c => G.types[c] === 'ai';
@@ -977,16 +992,30 @@ function updateUI() {
   diceScene.style.setProperty('--pip', k.main);
   if (lastAvatar !== c) { drawAvatar(avatarCv, c); lastAvatar = c; }
   const ai = G.active && G.state !== 'over' && isAI(c);
-  turnName.textContent = G.state === 'over' ? k.name + ' wins!' : k.name + "'s turn";
+  turnName.textContent = '';
+  const nm = document.createElement('span');
+  nm.className = 'nm';
+  nm.textContent = G.state === 'over' ? k.name + ' wins!' : k.name + "'s turn";
+  turnName.appendChild(nm);
   if (ai) {
     const tag = document.createElement('span');
-    tag.className = 'ai-tag'; tag.textContent = 'Computer';
+    tag.className = 'ai-tag'; tag.textContent = 'AI';
     turnName.appendChild(tag);
   }
   const ready = G.state === 'roll' && !ai;
   diceScene.classList.toggle('ready', ready);
   arrowEl.classList.toggle('show', ready);
-  hintEl.textContent = ready ? 'Tap to roll' : G.state === 'rolling' ? 'Rolling...' : G.state === 'select' ? 'Rolled ' + G.roll : (ai ? 'Computer is playing' : '');
+  const showRoll = G.rollShown && (G.state === 'select' || G.state === 'moving' || G.state === 'rolling');
+  let txt = '';
+  if (showRoll) txt = 'Rolled: ' + G.roll + '!';
+  else if (ready) txt = 'Tap to roll';
+  else if (G.state === 'rolling') txt = 'Rolling...';
+  else if (ai) txt = 'Computer turn';
+  hintEl.classList.toggle('hot', showRoll);
+  if (hintEl.textContent !== txt) {
+    hintEl.textContent = txt;
+    if (showRoll) { hintEl.classList.remove('pop'); void hintEl.offsetWidth; hintEl.classList.add('pop'); }
+  }
   renderScores();
 }
 
@@ -996,7 +1025,7 @@ function updateUI() {
 function nextTurn() {
   G.cur = (G.cur + 1) % G.players.length;
   G.state = 'roll';
-  setMsg(isAI(curColor()) ? label(curColor()) + ' is up.' : 'Tap the dice to roll');
+  setMsg(isAI(curColor()) ? 'Thinking...' : 'Tap dice to roll');
   updateUI();
   scheduleAI();
 }
@@ -1067,13 +1096,16 @@ async function onRoll(auto) {
   Snd.init();
   const gid = G.gid, c = curColor();
   G.state = 'rolling';
-  setMsg(label(c) + ' is rolling...');
+  G.rollShown = false;
+  setMsg('Rolling...');
   updateUI();
   const v = 1 + Math.floor(Math.random() * 6);
   Snd.roll();
   await animateDice(v);
   if (gid !== G.gid) return;
   G.roll = v;
+  G.rollShown = true;
+  updateUI();
   await afterRoll(gid);
 }
 
@@ -1081,7 +1113,7 @@ async function afterRoll(gid) {
   const c = curColor(), v = G.roll, name = label(c);
   const mv = G.tokens.filter(t => t.c === c && canMove(t, v));
   if (!mv.length) {
-    setMsg(name + ' rolled ' + v + '. No move possible.');
+    setMsg('No move possible');
     Snd.nomove(); updateUI();
     await delay(1100);
     if (gid !== G.gid) return;
@@ -1091,14 +1123,14 @@ async function afterRoll(gid) {
   if (isAI(c)) {
     const pick = aiChoose(mv, v);
     G.movable = [pick]; G.state = 'select';       // highlights the token it chose
-    setMsg(name + ' rolled ' + v + '.');
+    setMsg("Computer's move");
     updateUI();
     if (!(await aiWait(650 + Math.random() * 350, gid))) return;
     await doMove(pick, v, gid);
     return;
   }
   if (new Set(mv.map(t => t.p)).size === 1) {
-    setMsg(name + ' rolled ' + v + '.');
+    setMsg('Moving...');
     G.movable = []; updateUI();
     await delay(380);
     if (gid !== G.gid) return;
@@ -1107,7 +1139,7 @@ async function afterRoll(gid) {
   }
   G.movable = mv;
   G.state = 'select';
-  setMsg(name + ' rolled ' + v + '. Tap a glowing token.');
+  setMsg('Tap a glowing token');
   updateUI();
 }
 
@@ -1194,7 +1226,7 @@ async function doMove(tok, v, gid) {
   if (gid !== G.gid) return;
   if (v === 6 || captured) {
     G.state = 'roll';
-    setMsg(captured ? 'Captured! Roll again.' : 'A six! Roll again.');
+    setMsg(captured ? 'Kill! Roll again' : 'Six! Roll again');
     updateUI();
     scheduleAI();
   } else {
@@ -1205,7 +1237,7 @@ async function doMove(tok, v, gid) {
 function win(c) {
   const gid = G.gid;
   G.state = 'over'; G.winner = c; G.movable = [];
-  setMsg('All four tokens are home.');
+  setMsg('All tokens home!');
   updateUI();
   Snd.victory();
   Confetti.start();
@@ -1232,7 +1264,7 @@ function startGame() {
   lastAvatar = -1;
   $('menu').classList.add('hidden');
   $('winner').classList.add('hidden');
-  setMsg(isAI(curColor()) ? label(curColor()) + ' is up.' : 'Tap the dice to roll');
+  setMsg(isAI(curColor()) ? 'Thinking...' : 'Tap dice to roll');
   updateUI();
   scheduleAI();
 }
@@ -1258,7 +1290,7 @@ canvas.addEventListener('pointerdown', e => {
   if (best && bd < 0.62) {
     doMove(best, G.roll, G.gid);
   } else {
-    setMsg('Tap one of the glowing ' + COL[curColor()].name + ' tokens.');
+    setMsg('Tap a glowing token');
   }
 });
 diceScene.addEventListener('click', () => onRoll(false));
